@@ -2,8 +2,8 @@
 
 #### scalable header
 - msg_type u_int16
-- src_id u_int16
-- dst_id u_int16
+- src_id u_int64
+- dst_id u_int64
 - error u_int16
 - len u_int16
 
