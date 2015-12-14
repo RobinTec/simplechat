@@ -27,12 +27,12 @@ func handleConn(conn net.Conn, queue *MsgQueue) {
 				break
 			}
 		case improtocal.SEND_TO_ONE:
-			if err = improtocal.SendPersonalMsgAck(conn, recv.Payload); err != nil {
+			if err = improtocal.SendPersonalMsgAck(conn, recv.Src_id); err != nil {
 				log.Printf("%s", err)
 				break
 			}
 		case improtocal.SEND_TO_GROUP:
-			if err = improtocal.SendGroupMsgAck(conn, recv.Payload); err != nil {
+			if err = improtocal.SendGroupMsgAck(conn, recv.Src_id); err != nil {
 				log.Printf("%s", err)
 				break
 			}

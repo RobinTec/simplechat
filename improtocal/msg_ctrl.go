@@ -11,18 +11,18 @@ func SendLogin(conn net.Conn, nickname string) (err error) {
 	var pkg Package
 	pkg.Msg_type = LOGIN
 	pkg.Payload = nickname
-	err = Write(conn)
+	err = Write(conn, pkg)
 	return
 }
 
 func SendLoginAck(conn net.Conn, nickname string) (err error) {
-	var pkg improtocal.Package
+	var pkg Package
 	pkg.Msg_type = LOGIN_ACK
 	pkg.Src_id = uint64(1)
 	pkg.Dst_id = uint64(rand.Int63())
 	pkg.Payload = fmt.Sprintf("Welcome %s , your temporary id is %d", nickname, pkg.Dst_id)
 	log.Printf("%s login success from %s\n", nickname, conn.RemoteAddr())
-	err = improtocal.Write(conn, pkg)
+	err = Write(conn, pkg)
 	return err
 }
 
@@ -37,6 +37,7 @@ func SendPersonalMsgAck(conn net.Conn, cli_id uint64) (err error) {
 	if err = sendMsgAck(conn, cli_id); err != nil {
 		log.Printf("Send personal msg ack to %s failed\n", conn.RemoteAddr())
 	}
+	return
 }
 
 func SendGroupMsg(conn net.Conn, from uint64, to uint64, msgContext string) (err error) {
@@ -50,9 +51,10 @@ func SendGroupMsgAck(conn net.Conn, cli_id uint64) (err error) {
 	if err = sendMsgAck(conn, cli_id); err != nil {
 		log.Printf("Send group msg ack to %s failed\n", conn.RemoteAddr())
 	}
+	return
 }
 
-func sendMsg(conn net.Conn, msg_type uint64, from uint64, to uint64, msgContext string) (err error) {
+func sendMsg(conn net.Conn, msg_type uint16, from uint64, to uint64, msgContext string) (err error) {
 	var pkg Package
 	pkg.Msg_type = msg_type
 	pkg.Src_id = from
@@ -63,10 +65,10 @@ func sendMsg(conn net.Conn, msg_type uint64, from uint64, to uint64, msgContext 
 }
 
 func sendMsgAck(conn net.Conn, cli_id uint64) (err error) {
-	var pkg improtocal.Package
+	var pkg Package
 	pkg.Dst_id = cli_id
 	pkg.Error = SVR_RECV_MSG_OK
 	pkg.Payload = "Server received msg success"
-	err = improtocal.Write(conn, pkg)
+	err = Write(conn, pkg)
 	return
 }

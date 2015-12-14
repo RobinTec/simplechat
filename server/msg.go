@@ -1,5 +1,7 @@
 package server
 
+import "errors"
+
 type Msg struct {
 	From    uint64
 	To      uint64
@@ -10,6 +12,11 @@ type MsgQueue struct {
 	Queues []Msg
 	Lock   bool
 	IsNil  bool
+}
+
+func checkMsg(msg Msg) (err error) {
+	/* To be implemented */
+	return
 }
 
 func (this *MsgQueue) AddMsg(msg Msg) (err error) {

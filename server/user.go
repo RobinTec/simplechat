@@ -2,6 +2,7 @@ package server
 
 import (
 	"net"
+	"simplechat/utils"
 )
 
 type OnlineUser struct {
@@ -26,6 +27,7 @@ func (this *OnlineUserList) Append(onlineUser OnlineUser) (err error) {
 	this.Lock = true
 	this.UserList[string(utils.Uint64ToBytes(onlineUser.Id))] = onlineUser
 	this.Lock = false
+	return
 }
 
 func (this *OnlineUserList) Delete(onlineUser OnlineUser) (err error) {
@@ -34,4 +36,5 @@ func (this *OnlineUserList) Delete(onlineUser OnlineUser) (err error) {
 	this.Lock = true
 	delete(this.UserList, string(utils.Uint64ToBytes(onlineUser.Id)))
 	this.Lock = false
+	return
 }
